@@ -21,19 +21,6 @@ def add_book(request):
     return JsonResponse(response)
 
 @require_http_methods(['GET'])
-def delete_book(request):
-    response = {}
-    try:
-        book = Book(book_name = request.GET.get('book_name'))
-        book.delete()
-        response['msg'] = 'success'
-        response['error_num'] = 0
-    except Exception as e:
-        response['msg'] = str(e)
-        response['error_num'] = 1
-    return JsonResponse(response)
-
-@require_http_methods(['GET'])
 def show_books(request):
     response = {}
     try:

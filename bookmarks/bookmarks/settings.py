@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -33,6 +34,8 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'account.apps.AccountConfig',
     'api_test.apps.ApiTestConfig',
+    'blog.apps.BlogConfig',
+    'taggit',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -108,7 +111,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Chongqing'
 
 USE_I18N = True
 
@@ -126,4 +129,14 @@ STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGIN_URL = 'login'
+<<<<<<< HEAD
 LOGOUT_URL = 'logout'
+=======
+LOGOUT_URL = 'logout'
+
+EMAIL_HOST = 'smtp.163.com'
+EMAIL_HOST_USER = 'zangree7@163.com'
+EMAIL_HOST_PASSWORD = os.environ.get('MYSITE_EMAIL_PASSWD')
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+>>>>>>> f391e6baf236acf3da8b2cdf43c811661834e2e6
