@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'account.apps.AccountConfig',
     'api_test.apps.ApiTestConfig',
     'blog.apps.BlogConfig',
+    'taggit',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
