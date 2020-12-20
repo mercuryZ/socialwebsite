@@ -1,13 +1,22 @@
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, get_object_or_404
-from .forms import EmailPostForm
-from .models import Post
+from .forms import EmailPostForm, CommentForm
+from .models import Post, Comment
+from taggit.models import Tag
+
 
 # Create your views here.
-def post_list(request):
-    posts_list = Post.published.all()
-    paginator = Paginator(posts_list, 3)
+def post_list(request, tag_slug = None):
+    object_list = Post.published.all()
+    tag = None
+
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug = tag_slug)
+        object_list = object_list.filter(tags_in = [tag])
+
+    paginator = Paginator(object_list, 3)
+    
     page = request.GET.get('page')
     try:
         posts = paginator.page(page)
@@ -26,7 +35,27 @@ def post_detail(request, year, month, day, post):
                              publish__year=year,
                              publish__month=month,
                              publish__day=day)
-    return render(request, 'blog/post/detail.html', {'post': post})
+    
+    comments = post.comments.filter(active = True)
+
+    new_comment = None
+
+    if request.method == 'POST':
+        # A comment was posted
+        comment_form = CommentForm(data = request.POST)
+        if comment_form.is_valid():
+            
+            new_comment = comment_form.save(commit = False)
+            new_comment.post = post
+            new_comment.save()
+    else:
+        comment_form = CommentForm()
+    return render(request,
+                  'blog/post/detail.html',
+                  {'post': post,
+                  'comments': comments,
+                  'new_comment': new_comment,
+                  'comment_form': comment_form})
 
 def post_share(request, post_id):
     post = get_object_or_404(Post, id = post_id, status = 'published')
